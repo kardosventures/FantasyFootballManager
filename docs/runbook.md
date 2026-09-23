@@ -2,8 +2,10 @@
 
 ## Prerequisites
 
-1. Free at least 40 GB on the internal APFS disk. PostgreSQL and Docker volumes stay internal.
-2. Start Docker Desktop and enable “Start Docker Desktop when you sign in.”
+1. Mount `Extreme SSD` before starting Docker Desktop. Docker Desktop's data folder, including the
+   live PostgreSQL volume, is `/Volumes/Extreme SSD/DockerDesktop`.
+2. Keep enough internal free space for macOS and host tools, then start Docker Desktop and enable
+   “Start Docker Desktop when you sign in.”
 3. Copy `.env.example` to `.env`, generate both secrets, select a private `DASHBOARD_BIND_ADDRESS`, and configure the Slack incoming webhook.
 4. Grant Accessibility and Screen Recording to Terminal/the built mac-agent in System Settings.
 5. Keep the Mac on AC, logged in, awake, and online during action windows. The production
@@ -42,6 +44,22 @@ CONFIRM_RESTORE=restore-fantasy ./scripts/restore.sh "/Volumes/Extreme SSD/Fanta
 ```
 
 After restoration, rerun bootstrap and compare readiness, source hashes, and action state before re-enabling the mac-agent.
+
+## Fresh-Mac Docker rehydration
+
+The SSD retains Docker Desktop's `Docker.raw`, but Docker Desktop's pointer to that data folder is a
+per-Mac setting. The recovery directory retains a copy of `settings-store.json`. After installing
+Docker Desktop on a fresh Mac, keep Docker stopped and run:
+
+```sh
+./scripts/rehydrate-docker.sh --apply
+```
+
+The script refuses to proceed unless the SSD, saved setting, Docker application, and existing
+`Docker.raw` are present. It backs up any fresh settings file, changes only `DataFolder`, starts
+Docker Desktop, and waits for the daemon. Do not create or reset Docker data on the internal disk.
+If the retained Docker disk cannot be opened by a future Docker version, create a clean data disk
+and restore the verified PostgreSQL dump from `FantasyFootballBackups`.
 
 ## Operational health
 
