@@ -35,6 +35,23 @@ elif [[ -e "$RUNTIME_LINK" ]]; then
   exit 1
 fi
 print "Unlocking the encrypted Fantasy Football runtime..."
-hdiutil attach -nobrowse -mountpoint "$RUNTIME_MOUNT" "$RUNTIME_BUNDLE"
+runtime_pass=$(/usr/bin/osascript \
+  -e 'with timeout of 900 seconds' \
+  -e 'tell application "System Events"' \
+  -e 'activate' \
+  -e 'set dialogResult to display dialog "Unlock the encrypted Fantasy Football live runtime." default answer "" with hidden answer buttons {"Cancel", "Unlock"} default button "Unlock" with title "Fantasy Football Runtime"' \
+  -e 'end tell' \
+  -e 'end timeout' \
+  -e 'return text returned of dialogResult')
+[[ -n "$runtime_pass" ]] || {
+  print -u2 "Runtime password cannot be empty."
+  exit 1
+}
+printf '%s\n' "$runtime_pass" | hdiutil attach \
+  -stdinpass \
+  -nobrowse \
+  -mountpoint "$RUNTIME_MOUNT" \
+  "$RUNTIME_BUNDLE"
+unset runtime_pass
 ln -s "$RUNTIME_MOUNT" "$RUNTIME_LINK"
 print "Runtime mounted at $RUNTIME_MOUNT and linked from $RUNTIME_LINK"

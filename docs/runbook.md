@@ -84,6 +84,9 @@ Mount it interactively with:
 make mount-runtime
 ```
 
+The password is collected by a local hidden macOS dialog and is never written to disk or command
+history.
+
 After installing Docker Desktop, Chrome, Node/Corepack, and the Codex CLI on a fresh Mac, the full
 host recovery sequence is:
 
