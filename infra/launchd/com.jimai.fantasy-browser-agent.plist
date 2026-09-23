@@ -6,10 +6,10 @@
     <string>/usr/bin/caffeinate</string>
     <string>-s</string>
     <string>/usr/local/bin/node</string>
-    <string>--env-file-if-exists=/Users/jimkardos/Library/Application Support/JimAiFantasy/.env</string>
-    <string>/Users/jimkardos/Library/Application Support/JimAiFantasy/browser-agent/src/main.mjs</string>
+    <string>--env-file-if-exists=/Volumes/Extreme SSD/FantasyFootballManager/runtime/.env</string>
+    <string>/Volumes/Extreme SSD/FantasyFootballManager/runtime/browser-agent/src/main.mjs</string>
   </array>
-  <key>WorkingDirectory</key><string>/Users/jimkardos/Library/Application Support/JimAiFantasy/browser-agent</string>
+  <key>WorkingDirectory</key><string>/Volumes/Extreme SSD/FantasyFootballManager/runtime/browser-agent</string>
   <key>RunAtLoad</key><true/><key>KeepAlive</key><true/>
   <key>StandardOutPath</key><string>/tmp/com.jimai.fantasy-browser-agent.log</string>
   <key>StandardErrorPath</key><string>/tmp/com.jimai.fantasy-browser-agent.err</string>

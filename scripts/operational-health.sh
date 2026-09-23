@@ -5,9 +5,10 @@ SCRIPT_DIR=${0:A:h}
 PROJECT_DIR=${FANTASY_PROJECT_DIR:-${SCRIPT_DIR:h}}
 ENV_FILE=${FANTASY_ENV_FILE:-$PROJECT_DIR/.env}
 [[ -f "$ENV_FILE" ]] && set -a && source "$ENV_FILE" && set +a
-BACKUP_TARGET=${BACKUP_DIR:-/Volumes/Extreme SSD/FantasyFootballBackups}
+BACKUP_TARGET=${BACKUP_DIR:-/Volumes/Extreme SSD/FantasyFootballManager/backups}
 minimum_gb=${MIN_FREE_DISK_GB:-40}
-free_kb=$(df -Pk /System/Volumes/Data | awk 'NR==2 {print $4}')
+storage_path=${FANTASY_RUNTIME_HOST_DIR:-$PROJECT_DIR}
+free_kb=$(df -Pk "$storage_path" | awk 'NR==2 {print $4}')
 free_gb=$((free_kb / 1024 / 1024))
 newest_backup=$(find "$BACKUP_TARGET/daily" -type f -name 'fantasy-*.dump.gz' -mtime -2 -print -quit 2>/dev/null)
 backup_status=delegated

@@ -2,11 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
   <key>Label</key><string>com.jimai.fantasy-health</string>
-  <key>ProgramArguments</key><array><string>/Users/jimkardos/Library/Application Support/JimAiFantasy/scripts/operational-health.sh</string></array>
+  <key>ProgramArguments</key><array><string>/Volumes/Extreme SSD/FantasyFootballManager/runtime/scripts/operational-health.sh</string></array>
   <key>EnvironmentVariables</key><dict>
-    <key>FANTASY_PROJECT_DIR</key><string>/Users/jimkardos/Documents/ChatGPT/Fantasy Football manager</string>
-    <key>FANTASY_ENV_FILE</key><string>/Users/jimkardos/Library/Application Support/JimAiFantasy/.env</string>
-    <key>FANTASY_HOST_HEALTH_PATH</key><string>/Users/jimkardos/Library/Application Support/JimAiFantasy/host-health.json</string>
+    <key>FANTASY_PROJECT_DIR</key><string>/Volumes/Extreme SSD/FantasyFootballManager/source</string>
+    <key>FANTASY_ENV_FILE</key><string>/Volumes/Extreme SSD/FantasyFootballManager/runtime/.env</string>
+    <key>FANTASY_HOST_HEALTH_PATH</key><string>/Volumes/Extreme SSD/FantasyFootballManager/runtime/host-health.json</string>
     <key>PATH</key><string>/usr/local/bin:/opt/homebrew/bin:/Applications/Docker.app/Contents/Resources/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
   </dict>
   <key>RunAtLoad</key><true/>

@@ -5,7 +5,7 @@ SCRIPT_DIR=${0:A:h}
 PROJECT_DIR=${FANTASY_PROJECT_DIR:-${SCRIPT_DIR:h}}
 ENV_FILE=${FANTASY_ENV_FILE:-$PROJECT_DIR/.env}
 [[ -f "$ENV_FILE" ]] && set -a && source "$ENV_FILE" && set +a
-BACKUP_TARGET=${BACKUP_DIR:-/Volumes/Extreme SSD/FantasyFootballBackups}
+BACKUP_TARGET=${BACKUP_DIR:-/Volumes/Extreme SSD/FantasyFootballManager/backups}
 DB_CONTAINER=${FANTASY_DB_CONTAINER:-fantasy-operations-db-1}
 [[ "$DB_CONTAINER" == fantasy-operations-db-<-> ]] || { print -u2 "Unsafe database container name"; exit 2; }
 case "$BACKUP_TARGET" in

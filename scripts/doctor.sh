@@ -18,9 +18,10 @@ check() {
   fi
 }
 
-internal_free_gb() {
+runtime_free_gb() {
   local free_kb
-  free_kb=$(df -Pk /System/Volumes/Data | awk 'NR==2 {print $4}')
+  local storage_path=${FANTASY_RUNTIME_HOST_DIR:-$PROJECT_DIR}
+  free_kb=$(df -Pk "$storage_path" | awk 'NR==2 {print $4}')
   [[ $((free_kb / 1024 / 1024)) -ge ${MIN_FREE_DISK_GB:-40} ]]
 }
 
@@ -33,8 +34,9 @@ PY
 }
 
 browser_ready() {
+  local runtime_dir=${FANTASY_RUNTIME_HOST_DIR:-$HOME/Library/Application Support/JimAiFantasy}
   [[ -x "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" ]]
-  [[ -d "$PROJECT_DIR/browser-agent/node_modules/playwright-core" ]]
+  [[ -d "$PROJECT_DIR/browser-agent/node_modules/playwright-core" || -d "$runtime_dir/browser-agent/node_modules/playwright-core" ]]
 }
 
 session_ready() {
@@ -62,7 +64,7 @@ codex_ready() {
   [[ -x "$executable" ]] && [[ -s "${CODEX_HOME:-$HOME/.codex}/auth.json" ]]
 }
 
-check "40 GB free internal storage" internal_free_gb
+check "40 GB free runtime storage" runtime_free_gb
 check "Docker daemon" "${DOCKER_BIN:-/Applications/Docker.app/Contents/Resources/bin/docker}" info
 check "Sleeper public API" curl --fail --silent --max-time 10 "https://api.sleeper.app/v1/league/${SLEEPER_LEAGUE_ID:-1395499060898586624}"
 check "Private dashboard bind" private_dashboard_bind
@@ -73,7 +75,7 @@ check "Logged-in console session" session_ready
 check "Chrome and Playwright agent" browser_ready
 check "Persistent Sleeper browser profile" browser_profile_ready
 
-backup_dir=${BACKUP_DIR:-/Volumes/Extreme SSD/FantasyFootballBackups}
+backup_dir=${BACKUP_DIR:-/Volumes/Extreme SSD/FantasyFootballManager/backups}
 if [[ -d "${backup_dir:h}" && -w "${backup_dir:h}" ]]; then
   print "PASS  backup volume"
   newest_backup=$(find "$backup_dir/daily" -type f -name 'fantasy-*.dump.gz' -mtime -2 -print -quit 2>/dev/null)

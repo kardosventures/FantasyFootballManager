@@ -3,13 +3,15 @@ set -euo pipefail
 SCRIPT_DIR=${0:A:h}
 PROJECT_DIR=${SCRIPT_DIR:h}
 TARGET="$HOME/Library/LaunchAgents"
-RUNTIME_DIR="$HOME/Library/Application Support/JimAiFantasy"
+RUNTIME_DIR=${FANTASY_RUNTIME_HOST_DIR:-/Volumes/Extreme SSD/FantasyFootballManager/runtime}
 mkdir -p "$TARGET" "$RUNTIME_DIR" "$RUNTIME_DIR/codex-decisions"
 mkdir -p "$RUNTIME_DIR/scripts"
 chmod 700 "$RUNTIME_DIR/codex-decisions"
 ditto "$PROJECT_DIR/browser-agent" "$RUNTIME_DIR/browser-agent"
 ditto "$PROJECT_DIR/codex-agent" "$RUNTIME_DIR/codex-agent"
-cp "$PROJECT_DIR/.env" "$RUNTIME_DIR/.env"
+if [[ ! "$PROJECT_DIR/.env" -ef "$RUNTIME_DIR/.env" ]]; then
+  cp "$PROJECT_DIR/.env" "$RUNTIME_DIR/.env"
+fi
 chmod 600 "$PROJECT_DIR/.env" "$RUNTIME_DIR/.env"
 cp "$PROJECT_DIR/scripts/operational-health.sh" "$RUNTIME_DIR/scripts/operational-health.sh"
 cp "$PROJECT_DIR/scripts/codex-watchdog.sh" "$RUNTIME_DIR/scripts/codex-watchdog.sh"

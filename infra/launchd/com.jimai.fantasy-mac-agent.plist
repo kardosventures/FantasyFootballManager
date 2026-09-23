@@ -2,7 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
   <key>Label</key><string>com.jimai.fantasy-mac-agent</string>
-  <key>ProgramArguments</key><array><string>/Users/jimkardos/Documents/ChatGPT/Fantasy Football manager/scripts/run-agent.sh</string></array>
+  <key>ProgramArguments</key><array><string>/Volumes/Extreme SSD/FantasyFootballManager/source/scripts/run-agent.sh</string></array>
   <key>RunAtLoad</key><true/><key>KeepAlive</key><true/>
   <key>StandardOutPath</key><string>/tmp/com.jimai.fantasy-mac-agent.log</string>
   <key>StandardErrorPath</key><string>/tmp/com.jimai.fantasy-mac-agent.err</string>

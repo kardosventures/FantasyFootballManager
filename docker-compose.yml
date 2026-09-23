@@ -31,10 +31,10 @@ services:
     env_file: ${ENV_FILE:-.env}
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
     volumes:
-      - ./reports:/app/reports
-      - ${CODEX_DECISIONS_HOST_DIR}:/app/codex-decisions
-      - "/Users/jimkardos/Library/Application Support/JimAiFantasy:/app/host-runtime:ro"
-      - "/Volumes/Extreme SSD/FantasyFootballBackups:/app/backups:ro"
+      - "${REPORTS_HOST_DIR:-./reports}:/app/reports"
+      - "${CODEX_DECISIONS_HOST_DIR}:/app/codex-decisions"
+      - "${FANTASY_RUNTIME_HOST_DIR}:/app/host-runtime:ro"
+      - "${BACKUP_DIR}:/app/backups:ro"
     ports:
       - "127.0.0.1:8000:8000"
     depends_on:
@@ -53,8 +53,8 @@ services:
     env_file: ${ENV_FILE:-.env}
     command: ["python", "-m", "app.scheduler"]
     volumes:
-      - ./reports:/app/reports
-      - ${CODEX_DECISIONS_HOST_DIR}:/app/codex-decisions
+      - "${REPORTS_HOST_DIR:-./reports}:/app/reports"
+      - "${CODEX_DECISIONS_HOST_DIR}:/app/codex-decisions"
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -66,8 +66,8 @@ services:
     env_file: ${ENV_FILE:-.env}
     command: ["python", "-m", "app.draft_monitor"]
     volumes:
-      - ./reports:/app/reports
-      - ${CODEX_DECISIONS_HOST_DIR}:/app/codex-decisions
+      - "${REPORTS_HOST_DIR:-./reports}:/app/reports"
+      - "${CODEX_DECISIONS_HOST_DIR}:/app/codex-decisions"
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -79,7 +79,7 @@ services:
     env_file: ${ENV_FILE:-.env}
     command: ["python", "-m", "app.worker"]
     volumes:
-      - ./reports:/app/reports
+      - "${REPORTS_HOST_DIR:-./reports}:/app/reports"
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -93,7 +93,7 @@ services:
     command: ["/bin/sh", "/usr/local/bin/container-backup.sh"]
     volumes:
       - ./scripts/container-backup.sh:/usr/local/bin/container-backup.sh:ro
-      - "/Volumes/Extreme SSD/FantasyFootballBackups:/backups"
+      - "${BACKUP_DIR}:/backups"
     depends_on:
       db:
         condition: service_healthy

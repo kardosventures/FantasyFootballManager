@@ -87,7 +87,7 @@ make event-calendar
 make test
 make lint
 make backup
-./scripts/verify-backup.sh "/Volumes/Extreme SSD/FantasyFootballBackups/daily/<file>.dump.gz"
+./scripts/verify-backup.sh "/Volumes/Extreme SSD/FantasyFootballManager/backups/daily/<file>.dump.gz"
 make browser-login
 make browser-agent
 make codex-agent

@@ -2,8 +2,9 @@
 
 ## Prerequisites
 
-1. Mount `Extreme SSD` before starting Docker Desktop. Docker Desktop's data folder, including the
-   live PostgreSQL volume, is `/Volumes/Extreme SSD/DockerDesktop`.
+1. Mount `Extreme SSD` before starting Docker Desktop. All durable project state lives beneath
+   `/Volumes/Extreme SSD/FantasyFootballManager`; Docker Desktop's data folder, including the live
+   PostgreSQL volume, is its `docker` subdirectory.
 2. Keep enough internal free space for macOS and host tools, then start Docker Desktop and enable
    “Start Docker Desktop when you sign in.”
 3. Copy `.env.example` to `.env`, generate both secrets, select a private `DASHBOARD_BIND_ADDRESS`, and configure the Slack incoming webhook.
@@ -26,7 +27,7 @@ Open `http://<private-mac-address>:3000`. The API remains at loopback only. Run 
 ## Backups
 
 The `backup` Docker service writes one compressed custom-format PostgreSQL dump per day beneath
-`/Volumes/Extreme SSD/FantasyFootballBackups`. It restores every dump into an isolated temporary
+`/Volumes/Extreme SSD/FantasyFootballManager/backups`. It restores every dump into an isolated temporary
 database before publishing it, then writes a checksum and verification manifest. Daily retention is
 14 days; Sunday copies retain the eight newest weeklies. `make backup` remains available for an
 on-demand backup.
@@ -34,13 +35,13 @@ on-demand backup.
 Independently restore-test an on-demand or scheduled backup with:
 
 ```sh
-./scripts/verify-backup.sh "/Volumes/Extreme SSD/FantasyFootballBackups/daily/<file>.dump.gz"
+./scripts/verify-backup.sh "/Volumes/Extreme SSD/FantasyFootballManager/backups/daily/<file>.dump.gz"
 ```
 
 Restore is deliberately guarded:
 
 ```sh
-CONFIRM_RESTORE=restore-fantasy ./scripts/restore.sh "/Volumes/Extreme SSD/FantasyFootballBackups/daily/<file>.dump.gz"
+CONFIRM_RESTORE=restore-fantasy ./scripts/restore.sh "/Volumes/Extreme SSD/FantasyFootballManager/backups/daily/<file>.dump.gz"
 ```
 
 After restoration, rerun bootstrap and compare readiness, source hashes, and action state before re-enabling the mac-agent.
@@ -59,7 +60,27 @@ The script refuses to proceed unless the SSD, saved setting, Docker application,
 `Docker.raw` are present. It backs up any fresh settings file, changes only `DataFolder`, starts
 Docker Desktop, and waits for the daemon. Do not create or reset Docker data on the internal disk.
 If the retained Docker disk cannot be opened by a future Docker version, create a clean data disk
-and restore the verified PostgreSQL dump from `FantasyFootballBackups`.
+and restore the verified PostgreSQL dump from `backups`.
+
+The canonical SSD layout is:
+
+```text
+FantasyFootballManager/
+├── source/    Git checkout
+├── docker/    Docker Desktop data disk
+├── backups/   verified PostgreSQL dumps
+├── recovery/  encrypted recovery image and offline Git bundle
+└── runtime/   mounted encrypted live runtime
+```
+
+The `runtime` mount holds `.env`, reports, browser authentication state, and Codex decision files.
+It must be mounted before Docker Desktop or the host LaunchAgents start.
+
+Mount it interactively with:
+
+```sh
+make mount-runtime
+```
 
 ## Operational health
 
