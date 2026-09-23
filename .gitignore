@@ -1,0 +1,46 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+secrets/
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.venv/
+
+# JavaScript and frontend build output
+node_modules/
+.pnpm-store/
+.next/
+frontend/out/
+*.tsbuildinfo
+
+# Runtime state and generated evidence
+.browser-profile/
+browser-agent/.browser-profile/
+reports/**
+!reports/.gitkeep
+backend/.cache/
+backend/backups/
+backend/codex-decisions/
+backend/host-runtime/
+backend/reports/
+*.sqlite3
+*.log
+*.dump
+*.dump.gz
+*.dump.gz.*
+*.tmp-*
+
+# Swift build output
+mac-agent/.build/
+mac-agent/.swiftpm/

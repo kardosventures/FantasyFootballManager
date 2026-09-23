@@ -1,0 +1,19 @@
+{
+  "name": "fantasy-sleeper-browser-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file-if-exists=../.env src/main.mjs",
+    "login": "node --env-file-if-exists=../.env src/login.mjs",
+    "qualify:waiver": "node --env-file-if-exists=../.env scripts/qualify-waiver-dialog.mjs",
+    "qualify:waiver-submit": "node --env-file-if-exists=../.env scripts/execute-qualified-waiver.mjs",
+    "qualify:waiver-reconcile": "node --env-file-if-exists=../.env scripts/reconcile-qualified-waiver.mjs",
+    "test": "node --test",
+    "check": "node --check src/*.mjs"
+  },
+  "dependencies": {
+    "playwright-core": "1.63.0"
+  },
+  "packageManager": "pnpm@11.24.0"
+}

@@ -1,0 +1,115 @@
+name: fantasy-operations
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-fantasy}
+      POSTGRES_USER: ${POSTGRES_USER:-fantasy}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-fantasy}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-fantasy} -d ${POSTGRES_DB:-fantasy}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  migrate:
+    build:
+      context: ./backend
+    env_file: ${ENV_FILE:-.env}
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api:
+    build:
+      context: ./backend
+    env_file: ${ENV_FILE:-.env}
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    volumes:
+      - ./reports:/app/reports
+      - ${CODEX_DECISIONS_HOST_DIR}:/app/codex-decisions
+      - "/Users/jimkardos/Library/Application Support/JimAiFantasy:/app/host-runtime:ro"
+      - "/Volumes/Extreme SSD/FantasyFootballBackups:/app/backups:ro"
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/live')"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+
+  scheduler:
+    build:
+      context: ./backend
+    env_file: ${ENV_FILE:-.env}
+    command: ["python", "-m", "app.scheduler"]
+    volumes:
+      - ./reports:/app/reports
+      - ${CODEX_DECISIONS_HOST_DIR}:/app/codex-decisions
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  draft-monitor:
+    build:
+      context: ./backend
+    env_file: ${ENV_FILE:-.env}
+    command: ["python", "-m", "app.draft_monitor"]
+    volumes:
+      - ./reports:/app/reports
+      - ${CODEX_DECISIONS_HOST_DIR}:/app/codex-decisions
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: ./backend
+    env_file: ${ENV_FILE:-.env}
+    command: ["python", "-m", "app.worker"]
+    volumes:
+      - ./reports:/app/reports
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  backup:
+    image: postgres:16-alpine
+    env_file: ${ENV_FILE:-.env}
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD:-fantasy}
+    command: ["/bin/sh", "/usr/local/bin/container-backup.sh"]
+    volumes:
+      - ./scripts/container-backup.sh:/usr/local/bin/container-backup.sh:ro
+      - "/Volumes/Extreme SSD/FantasyFootballBackups:/backups"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    environment:
+      API_BASE_URL: http://api:8000
+    ports:
+      - "${DASHBOARD_BIND_ADDRESS:-127.0.0.1}:${DASHBOARD_PORT:-3000}:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

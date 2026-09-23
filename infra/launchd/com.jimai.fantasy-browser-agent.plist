@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>Label</key><string>com.jimai.fantasy-browser-agent</string>
+  <key>ProgramArguments</key><array>
+    <string>/usr/bin/caffeinate</string>
+    <string>-s</string>
+    <string>/usr/local/bin/node</string>
+    <string>--env-file-if-exists=/Users/jimkardos/Library/Application Support/JimAiFantasy/.env</string>
+    <string>/Users/jimkardos/Library/Application Support/JimAiFantasy/browser-agent/src/main.mjs</string>
+  </array>
+  <key>WorkingDirectory</key><string>/Users/jimkardos/Library/Application Support/JimAiFantasy/browser-agent</string>
+  <key>RunAtLoad</key><true/><key>KeepAlive</key><true/>
+  <key>StandardOutPath</key><string>/tmp/com.jimai.fantasy-browser-agent.log</string>
+  <key>StandardErrorPath</key><string>/tmp/com.jimai.fantasy-browser-agent.err</string>
+  <key>ThrottleInterval</key><integer>30</integer>
+</dict></plist>
