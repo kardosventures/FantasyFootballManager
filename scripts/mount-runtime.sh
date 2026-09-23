@@ -37,7 +37,7 @@ fi
 print "Unlocking the encrypted Fantasy Football runtime..."
 runtime_pass=$(/usr/bin/osascript \
   -e 'with timeout of 900 seconds' \
-  -e 'tell application "System Events"' \
+  -e 'tell application "Finder"' \
   -e 'activate' \
   -e 'set dialogResult to display dialog "Unlock the encrypted Fantasy Football live runtime." default answer "" with hidden answer buttons {"Cancel", "Unlock"} default button "Unlock" with title "Fantasy Football Runtime"' \
   -e 'end tell' \
