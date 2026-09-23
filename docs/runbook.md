@@ -84,6 +84,18 @@ Mount it interactively with:
 make mount-runtime
 ```
 
+After installing Docker Desktop, Chrome, Node/Corepack, and the Codex CLI on a fresh Mac, the full
+host recovery sequence is:
+
+```sh
+cd "/Volumes/Extreme SSD/FantasyFootballManager/source"
+make rehydrate-system
+```
+
+This mounts the encrypted runtime, restores Docker Desktop's SSD data-folder pointer, recreates the
+Compose services with SSD bind mounts, installs the host LaunchAgents, and runs all doctor checks.
+macOS Accessibility and Screen Recording permissions must still be granted through System Settings.
+
 ## Operational health
 
 `make install-launchd` installs the browser worker, Codex worker, one-minute Codex heartbeat

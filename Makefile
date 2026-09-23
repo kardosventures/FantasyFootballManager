@@ -2,7 +2,7 @@ SHELL := /bin/zsh
 DOCKER ?= $(shell command -v docker 2>/dev/null || echo /Applications/Docker.app/Contents/Resources/bin/docker)
 COMPOSE := $(DOCKER) compose
 
-.PHONY: bootstrap probe dev web api scheduler draft-monitor worker sync sync-sleeper sync-rankings sync-in-season sync-fantasypros historical-backfill manager projection-backtest championship-backtest league-readiness event-calendar draft-room notification-test test lint format migrate doctor backup restore mount-runtime rehydrate-docker replay-draft replay-events browser-agent browser-login browser-qualify-waiver browser-qualify-waiver-submit browser-qualify-waiver-reconcile codex-agent mac-agent install-launchd
+.PHONY: bootstrap probe dev web api scheduler draft-monitor worker sync sync-sleeper sync-rankings sync-in-season sync-fantasypros historical-backfill manager projection-backtest championship-backtest league-readiness event-calendar draft-room notification-test test lint format migrate doctor backup restore mount-runtime rehydrate-docker rehydrate-system replay-draft replay-events browser-agent browser-login browser-qualify-waiver browser-qualify-waiver-submit browser-qualify-waiver-reconcile codex-agent mac-agent install-launchd
 
 bootstrap:
 	@test -f .env || cp .env.example .env
@@ -101,6 +101,9 @@ rehydrate-docker:
 
 mount-runtime:
 	./scripts/mount-runtime.sh
+
+rehydrate-system:
+	./scripts/rehydrate-system.sh
 
 browser-agent:
 	cd browser-agent && corepack pnpm start
