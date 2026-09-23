@@ -20,7 +20,7 @@ check() {
 
 runtime_free_gb() {
   local free_kb
-  local storage_path=${FANTASY_RUNTIME_HOST_DIR:-$PROJECT_DIR}
+  local storage_path=${FANTASY_STORAGE_HEALTH_PATH:-${FANTASY_ROOT:-$PROJECT_DIR}}
   free_kb=$(df -Pk "$storage_path" | awk 'NR==2 {print $4}')
   [[ $((free_kb / 1024 / 1024)) -ge ${MIN_FREE_DISK_GB:-40} ]]
 }

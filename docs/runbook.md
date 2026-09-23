@@ -70,11 +70,13 @@ FantasyFootballManager/
 ├── docker/    Docker Desktop data disk
 ├── backups/   verified PostgreSQL dumps
 ├── recovery/  encrypted recovery image and offline Git bundle
-└── runtime/   mounted encrypted live runtime
+└── runtime -> /Volumes/FantasyFootballRuntime
 ```
 
-The `runtime` mount holds `.env`, reports, browser authentication state, and Codex decision files.
-It must be mounted before Docker Desktop or the host LaunchAgents start.
+The hidden `.runtime.sparsebundle` remains beneath the shared root. macOS mounts that encrypted
+image at `/Volumes/FantasyFootballRuntime`; the root's `runtime` symlink points to it. The runtime
+holds `.env`, reports, browser authentication state, and Codex decision files. It must be mounted
+before Docker Desktop or the host LaunchAgents start.
 
 Mount it interactively with:
 
